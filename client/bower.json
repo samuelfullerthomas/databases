@@ -1,0 +1,25 @@
+{
+  "name": "client",
+  "version": "0.0.0",
+  "homepage": "https://github.com/phillydorn/MKS14-databases",
+  "authors": [
+    "MKS-Student <mks.student@hackreactor.com>"
+  ],
+  "dependencies": {
+    "jquery" : "~2.0.3",
+    "underscore": "~1.8.2"
+  },
+  "main": "index.html",
+  "keywords": [
+    "none"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "client/bower_components",
+    "test",
+    "tests"
+  ]
+}
