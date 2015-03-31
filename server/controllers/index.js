@@ -7,26 +7,14 @@ var userId;
 module.exports = {
   messages: {
     get: function (req, res) {
-//   connection.query("SELECT * FROM messages WHERE user_id = 7", function (err, results) {
-//     if (err) {
-//       console.log('get error');
-//     }
-//     //res.status(200).send(results)
-//   });
-//   // connection.end();
-
-//   // fs.readFile('database.json', {encoding: 'utf8'}, function(err, data) {
-//   //   var t = [];
-//   //   if (!err) {
-//   //     t = JSON.parse(data);
-//   //     t.reverse();
-//   //   } 
-//   //  res.status(200).send(JSON.stringify({results:t}))
-//   // })
-// }
+      models.messages.get(function(data){
+        console.log(data)
+        var returnObj = {};
+        returnObj.results=data;
+        res.status(200).send(JSON.stringify(returnObj))
+      })
     }, // a function which handles a get request for all messages
     post: function (req, res) {
-      console.log('userId', userId)
       models.messages.post(req.body, userId) 
     }
    },

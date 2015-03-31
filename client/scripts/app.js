@@ -34,7 +34,7 @@ app.fetch = function(room) {
 	  contentType: 'application/json',
 	  // data: {'order': '-createdAt'},
 	  success: function (data) {
-      //console.log(data)
+      console.log(data)
      app.clearMessages();
       data = app.checkForSpam(data);
       app.updateRooms(data);
@@ -49,7 +49,7 @@ app.fetch = function(room) {
 
 app.addMessages = function(data, room) {
   data.forEach(function(value) {
-    if (value.roomname === room || room === 'initialStartup') {
+    if (value.room === room || room === 'initialStartup') {
       app.addMessage(value);
     }
   })
@@ -124,8 +124,8 @@ $(document).ready(function(){
       }
       app.send(message, '/classes/messages');
  //      app.addMessage(message)
- //      app.fetch($('#roomSelect').val());
- //      $('.messageBox').val('');
+      app.fetch($('#roomSelect').val());
+      $('.messageBox').val('');
 	})
 
   $('.roomBtn').click(function () {

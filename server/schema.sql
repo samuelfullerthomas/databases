@@ -12,6 +12,6 @@ PRIMARY KEY (id)
 
 CREATE table users (
   id int(3) NOT NULL AUTO_INCREMENT,
-  user_name varchar(20) NULL,
+  username varchar(20) NULL,
   PRIMARY KEY (id)
 );
