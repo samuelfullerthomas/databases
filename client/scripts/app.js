@@ -7,12 +7,13 @@ var app = {
 
 app.init = function() {
   app.username = decodeURI(window.location.search).slice(10);
+  app.send({username: app.username}, '/users');
   app.fetch('initialStartup')
 }
 
-app.send = function(message) {
+app.send = function(message, path) {
   $.ajax({
-  url: app.server + '/messages',
+  url: app.server + path,
   type: 'POST',
   data: JSON.stringify(message),
   contentType: 'application/json',
@@ -21,6 +22,7 @@ app.send = function(message) {
   },
   error: function (data) {
     console.error('chatterbox: Failed to send message');
+    console.log
   }
 });
 }
@@ -32,6 +34,7 @@ app.fetch = function(room) {
 	  contentType: 'application/json',
 	  // data: {'order': '-createdAt'},
 	  success: function (data) {
+      //console.log(data)
      app.clearMessages();
       data = app.checkForSpam(data);
       app.updateRooms(data);
@@ -119,7 +122,7 @@ $(document).ready(function(){
       	roomname : $('#roomSelect').val(),
       	username: app.username 
       }
-      app.send(message);
+      app.send(message, '/messages');
  //      app.addMessage(message)
  //      app.fetch($('#roomSelect').val());
  //      $('.messageBox').val('');

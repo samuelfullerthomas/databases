@@ -9,6 +9,7 @@ var connection = mysql.createConnection({
   password: '',
   database: 'chat'
 });
+var userId;
 
 // Middleware
 var morgan = require('morgan');
@@ -54,16 +55,41 @@ app.all('*', function(req, res, next){
   }
 });
 
-app.post('/messages', function(req, res){
-  console.log('any post happening');
+// connection.connect();
+//if it doesnt exist store it
+// connection.query("INSERT INTO users (user_name) VALUES (?) WHERE\
+//  NOT EXISTS (SELECT * FROM users WHERE user_name = ?)", [username, username, username], errorHandler)
 
-  connection.connect();
-  connection.query("INSERT INTO messages(text, user_id, room) VALUES ('another text', 8, 'lobby')", function(err, results, fields){
-    if (err){
-      console.log(err)
+app.post ('/users', function (req, res) {
+  var username = req.body.username;
+  var nameExists = true;
+  connection.query("SELECT id from users WHERE user_name = ?", [username], function (err, results) {
+    if(err){
+      return
     }
-    console.log('post results ' , results)
-  });
+    if (results.length < 1) {
+      nameExists = false;
+      connection.query("INSERT INTO users(user_name) VALUES (?)", [username], function (err, results) {
+        if (err) {return}
+        connection.query("SELECT id from users WHERE user_name = ?", [username], function (err, results) {
+          if (err) {return}
+          userId = results[0].id;
+        });
+      })
+    }
+  })
+  res.sendStatus(201)
+});
+
+
+
+app.post('/messages', function(req, res){
+
+
+  console.log(req.body.text, req.body.roomname);
+  // connection.connect();
+  connection.query("INSERT INTO messages(text, user_id, room) \
+    VALUES (?, ?, ?)", [req.body.text, userId, req.body.roomname], errorHandler);
   //connection.end();
   //to be replaced with mysql queries connection.query()
   // fs.readFile('database.json', {encoding: 'utf8'}, function(err, data) {
@@ -84,14 +110,14 @@ app.post('/messages', function(req, res){
 
 app.get('/messages', function(req, res) {
 
-  connection.connect();
-  connection.query("SELECT text FROM messages WHERE user_id = 7", function (err, results) {
+  // connection.connect();
+  connection.query("SELECT * FROM messages WHERE user_id = 7", function (err, results) {
     if (err) {
       console.log('get error');
     }
-    console.log('results' ,results);
+    //res.status(200).send(results)
   });
-  connection.end();
+  // connection.end();
 
   // fs.readFile('database.json', {encoding: 'utf8'}, function(err, data) {
   //   var t = [];
@@ -102,4 +128,9 @@ app.get('/messages', function(req, res) {
   //  res.status(200).send(JSON.stringify({results:t}))
   // })
 })
+function errorHandler(error, results, fields){
+  if(error){
+    console.log('error')
+  }
+}
 
