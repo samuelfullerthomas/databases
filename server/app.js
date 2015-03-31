@@ -18,6 +18,10 @@ app.set("port", 3000);
 app.use(morgan('dev'));
 app.use(parser.json());
 
+// Serve the client files
+app.use(express.static(__dirname + "/../client/"));
+
+
 app.all('*', function(req, res, next){
   res.header("Content-Type", "application/json");
   res.header("access-control-allow-methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -33,9 +37,6 @@ app.all('*', function(req, res, next){
 
 // Set up our routes
 app.use("/classes", router);
-
-// Serve the client files
-app.use(express.static(__dirname + "/../client"));
 
 // If we are being run directly, run the server.
 if (!module.parent) {

@@ -38,15 +38,16 @@ module.exports = {
     //NEED TO PUT CALLBACKS IN THESE FUNCTIONS
     post: function (req, res) {
       var username = req.body.username;
-      models.users.get(function (userId) {
-
+      models.users.get(username, function (data) {
+          userId = data;
+          console.log("Post return userId " + userId)
+          if (userId === undefined) {
+              models.users.post(username, function (data) {
+              userId = data;
+            });
+          }
+          res.sendStatus(201)
       });
-      console.log('UserID before check', userId)
-      if (!userId) {
-        models.users.post(username);
-        userId = models.users.get(username);
-      }
-      res.sendStatus(201)
     }
   }
 };

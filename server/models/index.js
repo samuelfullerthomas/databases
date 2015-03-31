@@ -12,16 +12,26 @@ module.exports = {
 
   users: {
     // Ditto as above.
-    get: function (callback) {
+    get: function (username, callback) {
       db.query("SELECT id from users WHERE user_name = ?", [username], function (err, results) {
         if(err){
           console.log('get error');
         }
-        callback(results[0].id);
+        console.log(results)
+        if (results.length>0) {
+          callback(results[0].id);          
+        } else {
+          callback(undefined)
+        }
       })
     },
-    post: function (username) {
-       db.query("INSERT INTO users(user_name) VALUES (?)", [username], errorHandler)
+    post: function (username, callback) {
+       db.query("INSERT INTO users(user_name) VALUES (?)", [username], function (err, results){
+        if(err){
+          console.log(' INSERTING USER ERROR')
+        }
+        callback(results.insertId)
+       })
     }
   } 
 };
