@@ -7,7 +7,7 @@ var app = {
 
 app.init = function() {
   app.username = decodeURI(window.location.search).slice(10);
-  app.send({username: app.username}, '/users');
+  app.send({username: app.username}, '/classes/users');
   app.fetch('initialStartup')
 }
 
@@ -29,7 +29,7 @@ app.send = function(message, path) {
 
 app.fetch = function(room) {
      $.ajax({
-	  url: app.server + '/messages', // +'/'+ room,
+	  url: app.server + '/classes/messages', // +'/'+ room,
 	  type: 'GET',
 	  contentType: 'application/json',
 	  // data: {'order': '-createdAt'},
@@ -122,7 +122,7 @@ $(document).ready(function(){
       	roomname : $('#roomSelect').val(),
       	username: app.username 
       }
-      app.send(message, '/messages');
+      app.send(message, '/classes/messages');
  //      app.addMessage(message)
  //      app.fetch($('#roomSelect').val());
  //      $('.messageBox').val('');
